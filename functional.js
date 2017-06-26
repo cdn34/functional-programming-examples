@@ -45,13 +45,13 @@ const fetch = (url, options) =>
     error ? rej(error) : res(body)))
 
 const app =
-  fetch("https://jsonplaceholder.typicode.com/users",{})				//Returns a Task
-	.map(contents => tryCatch( _ => JSON.parse(contents)))				//Returns an Task(Either --> Right || Left)
-	.chain(convertVal => eitherToTask(convertVal)) 								//Converts Either to Task
-	//.map(contents => {console.log(contents); return contents})
-  .map(json => json.map(c => (c.name += " - (Edited)") && c))		//Return a Task
-	.map(json => tryCatch( _ => JSON.stringify(json)))						//Returns an Task(Either --> Right || Left)
-	.chain(convertVal => eitherToTask(convertVal)) 								//Converts Either to Task
+  fetch("https://jsonplaceholder.typicode.com/users",{})			//Returns a Task
+  .map(contents => tryCatch( _ => JSON.parse(contents)))			//Returns an Task(Either --> Right || Left)
+  .chain(convertVal => eitherToTask(convertVal)) 							//Converts Either to Task
+  //.map(contents => {console.log(contents); return contents})
+  .map(json => json.map(c => (c.name += " - (Edited)") && c))	//Return a Task
+  .map(json => tryCatch( _ => JSON.stringify(json)))					//Returns an Task(Either --> Right || Left)
+  .chain(convertVal => eitherToTask(convertVal)) 							//Converts Either to Task
   .chain(jsonString => writeFile('dataTask.json',  jsonString))
 
 app.fork(console.error, console.log)														//Executes app
